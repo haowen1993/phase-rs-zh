@@ -39,8 +39,9 @@
 `client/public/scryfall-*.json`，那是 phase.rs 仓库里的生成物。没有仓库它跑不了，
 但**工具本身照常工作**。
 
-所以：仓库可以不要。但如果删掉它，请先把本目录**移出仓库**再删——这个目录里的东西
-没有提交过，删仓库就一起没了。
+所以：phase.rs 的仓库可以不要。本仓库是独立仓库
+（<https://github.com/haowen1993/phase-rs-zh>），克隆它就能开始开发，不需要
+phase.rs 的任何东西。想跑那个可选的覆盖率守卫时，才需要另外克隆一份 phase.rs。
 
 ## 效果与实测覆盖率
 
@@ -129,15 +130,19 @@ userscript 管理器的默认沙箱也改不了（所以必须写 `@inject-into 
 | --- | --- | --- |
 | phase.rs 换掉卡图 CDN（不再用 Scryfall） | 点书签后**完全没反应** | 改 `src/content.js` 里两个 host 常量与路径判断（几行），重新构建 |
 | 大学院废墟改了路径 | **静默**退回英文图或 Scryfall | `node tools/check-live.mjs` 会直接告诉你 |
-| phase.rs 加了严格 CSP | 书签完全失效（控制台报 CSP 违规） | 书签路线走不通，得回到扩展路线——扩展代码已归档在 `../zh-card-art-other-carriers.zip` |
+| phase.rs 加了严格 CSP | 书签完全失效（控制台报 CSP 违规） | 书签路线走不通，需要改成浏览器扩展。本仓库不含扩展代码，得重写（`src/content.js` 的逻辑可以直接复用，要改的只是「怎么送进页面主世界」那一层） |
 | 新增卡图尺寸（如 `grid`、`thumb`） | 只有那批图保持英文 | 往 `FACE_SIZES` 加尺寸；不加也不影响其他卡 |
 | 应用改成完全不写 `src` 属性 | 完全没反应 | 现在还有 `MutationObserver` 兜底；连属性都不写就得换方案 |
 
 **更新后花两分钟自查：**
 
 ```bash
-node tools/check-live.mjs                                 # 第三方那一侧（需要网络）
-node ../phase-rs-zh/tools/check-app-data-coverage.mjs      # 应用那一侧（在 phase.rs 仓库根目录跑）
+node tools/check-live.mjs    # 第三方那一侧（需要网络，在本仓库里跑）
+
+# 应用那一侧：该脚本读 client/public/scryfall-*.json，所以要在 phase.rs 克隆的
+# 根目录下运行，指向本仓库里的脚本（本仓库不需要是 phase.rs 的子目录）
+cd /path/to/phase-rs-clone
+node /path/to/phase-rs-zh/tools/check-app-data-coverage.mjs
 ```
 
 再用浏览器打开应用点一次书签，随便看一张卡。三条都过就什么都不用做。
