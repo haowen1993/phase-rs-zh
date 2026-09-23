@@ -248,6 +248,12 @@ test("书签小工具：三个产物同源且未过期", () => {
 
   // 安装页必须自包含：转发给别人时不该依赖任何外部资源。
   assert.ok(!/<(script|img|link)[^>]+(src|href)="(https?:)?\/\//.test(page), "安装页引用了外部资源");
+
+  // GitHub Pages 的入口必须是同一份页面。GitHub **不渲染**仓库里的 .html（点开只看
+  // 到源码），所以「README 里点一下就能拖按钮」全靠 docs/index.html 这一份；它一旦
+  // 落后于 dist/install.html，线上与本地就成了两个不同的安装页。
+  const pagesEntry = readFileSync(new URL("../docs/index.html", import.meta.url), "utf8");
+  assert.equal(pagesEntry, page, "docs/index.html 与 dist/install.html 不一致，请重新运行构建");
 });
 
 test("书签小工具：与 src/content.js 行为一致", () => {

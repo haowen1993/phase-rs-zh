@@ -37,6 +37,17 @@ const OUT_TXT = join(OUT_DIR, "phase-rs-zh.bookmarklet.txt");
 const OUT_HTML = join(OUT_DIR, "install.html");
 
 /**
+ * GitHub Pages 的入口。
+ *
+ * GitHub **不会渲染** 仓库里的 .html 文件——点 `dist/install.html` 只会看到源码，
+ * 所以「点开链接就能拖按钮」必须靠 Pages 提供真正的网页。Pages 只支持从分支根目录
+ * 或 `/docs` 发布，这里用后者，于是安装页要有一份放在 `docs/index.html`。
+ *
+ * 这份副本由本脚本生成、与 `dist/install.html` 逐字节相同，并由测试守着不许漂移。
+ */
+const OUT_PAGES = join(ROOT, "docs", "index.html");
+
+/**
  * 找到 esbuild 可执行文件，按优先级：
  *
  *   1. 环境变量 `ESBUILD_BIN`——把这个书签目录搬出 phase.rs 仓库之后，用这个指过去。
@@ -176,10 +187,18 @@ writeFileSync(
   "utf8",
 );
 writeFileSync(OUT_TXT, bookmarkletUrl, "utf8");
-writeFileSync(OUT_HTML, installPage(bookmarkletUrl, codeHash, Buffer.byteLength(code, "utf8")), "utf8");
+
+const page = installPage(bookmarkletUrl, codeHash, Buffer.byteLength(code, "utf8"));
+writeFileSync(OUT_HTML, page, "utf8");
+
+// Pages 入口：与 dist/install.html 逐字节相同的副本，外加载一个 .nojekyll。
+// .nojekyll 让 Pages 完全跳过 Jekyll 处理，避免它改动我们这份静态页。
+mkdirSync(dirname(OUT_PAGES), { recursive: true });
+writeFileSync(OUT_PAGES, page, "utf8");
+writeFileSync(join(dirname(OUT_PAGES), ".nojekyll"), "", "utf8");
 
 console.log(`正文 ${Buffer.byteLength(code, "utf8")} 字节 → 书签地址 ${bookmarkletUrl.length} 字节`);
 console.log(`内容 sha256 前 12 位: ${codeHash}`);
-for (const path of [OUT_JS, OUT_TXT, OUT_HTML]) {
+for (const path of [OUT_JS, OUT_TXT, OUT_HTML, OUT_PAGES]) {
   console.log(`  已生成 ${path.replace(`${REPO}/`, "")}`);
 }
