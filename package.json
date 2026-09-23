@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "一个书签小工具：把 phase.rs 网页版的卡图换成大学院废墟（mtgch.com）的简体中文图。",
+  "license": "MIT",
   "scripts": {
     "build": "node tools/build-bookmarklet.mjs",
     "test": "node --test test/content.test.mjs",
