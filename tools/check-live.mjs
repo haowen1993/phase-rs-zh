@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * 对着真实的大学院废墟图床跑一遍「三级阶梯」的判定，确认本插件依赖的 URL 形状
+ * 对着真实的大学院废墟图床跑一遍「三级阶梯」的判定，确认本工具依赖的 URL 形状
  * 今天仍然成立。
  *
  *     node tools/check-live.mjs
  *
- * 为什么需要它：插件不能查 API，判据就是 `/zhs/` 路径的 404。这套映射是第三方
- * 站点的实现细节，不是公开契约——哪天他们改了路径，插件会静默退化成「英文卡图」
+ * 为什么需要它：本工具不能查 API，判据就是 `/zhs/` 路径的 404。这套映射是第三方
+ * 站点的实现细节，不是公开契约——哪天他们改了路径，本工具会静默退化成「英文卡图」
  * 或「兜底 Scryfall」，界面不报错。这个脚本把那条隐式契约显式化，改动能被立刻
  * 发现。
  *
@@ -22,7 +22,7 @@ vm.runInThisContext(SOURCE, { filename: "content.js" });
 const { parseArtUrl, urlFor } = globalThis.__phaseZhCardArt;
 
 /**
- * 取样覆盖插件必须处理的每一类印刷：
+ * 取样覆盖本工具必须处理的每一类印刷：
  *  - 有官方中文图（2X2 Lightning Bolt）
  *  - 无中文图，只有英文图（UNF Standard Procedure）
  *  - 双面牌（ISD Delver of Secrets // Insectile Aberration）
@@ -64,8 +64,8 @@ async function probe(url) {
 let failures = 0;
 
 for (const sample of SAMPLES) {
-  // 先造一个应用的英文卡图 URL，再让插件自己的解析器把它变成待测 URL——这样
-  // 测的就是插件的真实输入输出，而不是脚本里另写一份拼装逻辑。
+  // 先造一个应用的英文卡图 URL，再让本工具自己的解析器把它变成待测 URL——这样
+  // 测的就是本工具的真实输入输出，而不是脚本里另写一份拼装逻辑。
   const seed = scryfallUrlFor({
     size: sample.size,
     face: sample.face,
@@ -75,7 +75,7 @@ for (const sample of SAMPLES) {
   });
   const parsed = parseArtUrl(seed);
   if (!parsed) {
-    console.log(`✖ ${sample.label}：插件解析不了自己的种子 URL ${seed}`);
+    console.log(`✖ ${sample.label}：本工具解析不了自己的种子 URL ${seed}`);
     failures += 1;
     continue;
   }
@@ -88,5 +88,5 @@ for (const sample of SAMPLES) {
 
 console.log(failures === 0
   ? "\n全部符合预期：三级阶梯的 URL 形状今天仍然成立。"
-  : `\n${failures} 项与预期不符：大学院废墟可能改了路径，插件需要跟着调整。`);
+  : `\n${failures} 项与预期不符：大学院废墟可能改了路径，本工具需要跟着调整。`);
 process.exit(failures === 0 ? 0 : 1);

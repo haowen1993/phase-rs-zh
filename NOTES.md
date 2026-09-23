@@ -132,7 +132,8 @@ src/content.js                  逻辑——你唯一要改的文件
 tools/build-bookmarklet.mjs     重新生成三个产物
 test/content.test.mjs           零依赖测试（node --test）
 dist/                           产物；可再生，但留着省事
-README.md                       这份文档
+README.md                       面向使用者：安装与常见问题
+NOTES.md                        本文件：设计、维护、分发
 ```
 
 **可选**：
@@ -160,7 +161,7 @@ node_modules/                     esbuild + vitest + happy-dom，删了 npm inst
 
 ```bash
 npm run build      # 从 src/content.js 重新生成 dist/ 三件套
-npm test           # 零依赖：纯逻辑 + 产物同源/等价校验（17 项）
+npm test           # 零依赖：纯逻辑 + 产物同源/等价校验（18 项）
 npm run check:live # 对真实图床核对三级阶梯（需要网络）
 npm run test:dom   # DOM 装配测试（11 项，需先 npm install）
 ```

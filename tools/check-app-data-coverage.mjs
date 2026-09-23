@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * 用 phase.rs 自己的数据文件，逐个验证插件的解析器认不认。
+ * 用 phase.rs 自己的数据文件，逐个验证本工具的解析器认不认。
  *
  *     node tools/check-app-data-coverage.mjs          # 在 phase.rs 仓库根目录跑
  *
  * 为什么值得留着：`check-live.mjs` 守的是大学院废墟那一侧的 URL 形状，这个守的是
- * **应用这一侧**。应用哪天新增一种卡图尺寸或换一个 CDN host，插件会静默漏改那批图
+ * **应用这一侧**。应用哪天新增一种卡图尺寸或换一个 CDN host，本工具会静默漏改那批图
  * ——界面不报错，只是那些卡还是英文。这个脚本把「应用能产出的每一种卡图 URL」都过
  * 一遍，漏改会立刻变成非零退出码。
  *
@@ -102,7 +102,7 @@ if (ignoredHosts.size > 0) {
 }
 
 if (missedTotal > 0) {
-  console.error("\n以下 cards.scryfall.io URL 形状未被插件识别（这些卡图将保持英文）：");
+  console.error("\n以下 cards.scryfall.io URL 形状未被本工具识别（这些卡图将保持英文）：");
   for (const [shape, count] of [...missed].sort((a, b) => b[1] - a[1]).slice(0, 20)) {
     console.error(`  ${String(count).padStart(7)}  ${shape}`);
   }

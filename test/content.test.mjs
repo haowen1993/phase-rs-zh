@@ -44,6 +44,14 @@ const ZHS = `https://images.mtgch.com/zhs/normal/front/${SHARD_A}/${SHARD_B}/${I
 const SF = `https://images.mtgch.com/sf/normal/front/${SHARD_A}/${SHARD_B}/${ID}.webp`;
 const SF_ART = `https://images.mtgch.com/sf/art_crop/front/${SHARD_A}/${SHARD_B}/${ID}.webp`;
 
+test("VERSION 与 package.json 的 version 一致（防漂移）", () => {
+  // 控制台那行 `[phase-rs-zh] 已启用 v…` 是用户确认「装的是哪一版」的唯一依据，
+  // 也是排障第一步。它读的是 src/content.js 里的 VERSION，而对外版本号记在
+  // package.json，两者漂移会让排障直接问错版本。
+  const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(version, pkg.version, "src/content.js 的 VERSION 与 package.json 不一致");
+});
+
 test("parseArtUrl 认出三个来源层级", () => {
   assert.equal(parseArtUrl(SCRYFALL).tier, "scryfall");
   assert.equal(parseArtUrl(ZHS).tier, "zh");
