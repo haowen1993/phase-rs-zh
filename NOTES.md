@@ -142,12 +142,19 @@ tools/check-live.mjs              守大学院废墟那侧的 URL 约定（需�
 test/assembly.dom.mjs              DOM 装配测试（需要 node_modules）
 vitest.config.mjs  package.json    上面那个测试的配置
 tools/check-app-data-coverage.mjs  守应用那侧；只有留着 phase.rs 仓库才有用
-node_modules/                     56 MB，只被 test:dom 用到，删了 npm install 就能回来
+node_modules/                     esbuild + vitest + happy-dom，删了 npm install 就能回来
 ```
 
-另外重新构建需要一个 **esbuild**：`brew install esbuild`，或在目录里 `npm i esbuild`，
-或用 `ESBUILD_BIN=/path/to/esbuild` 指过去。构建脚本按这个顺序查找，所以这个目录可以
-整体搬出 phase.rs 仓库独立存在。
+重新构建需要一个 **esbuild**，而它已经是本仓库的 devDependency——`npm install` 之后
+`npm run build` 就能用。构建脚本的查找顺序是：
+
+1. `ESBUILD_BIN` 环境变量（想指定某个特定版本时用）；
+2. **本目录自带的 `node_modules/.bin/esbuild`**（主路径；显式找它，所以直接
+   `node tools/build-bookmarklet.mjs` 也能跑，不必经过 npm）；
+3. `PATH` 上的任意 esbuild（`brew install esbuild` 也行）；
+4. 万一本目录被放进某个 phase.rs 克隆里，用它 `client/` 下已装好的那份。
+
+也就是说本仓库自带构建依赖，不依赖任何外部环境。
 
 ## 维护
 

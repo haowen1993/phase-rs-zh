@@ -50,12 +50,16 @@ const OUT_PAGES = join(ROOT, "docs", "index.html");
 /**
  * 找到 esbuild 可执行文件，按优先级：
  *
- *   1. 环境变量 `ESBUILD_BIN`——把这个书签目录搬出 phase.rs 仓库之后，用这个指过去。
- *   2. `PATH` 上任意一个 esbuild（`brew install esbuild` / `npm i -g esbuild` 都行）。
- *   3. 本仓库 `client/` 里已经装好的。pnpm 把平台包放在
+ *   1. 环境变量 `ESBUILD_BIN`——想指定某个特定版本时用。
+ *   2. **本目录自带的 `node_modules/.bin/esbuild`**（`npm install` 装的就是它）。
+ *      这条是主路径：本仓库把自己的构建依赖带在身上，不依赖外部环境。
+ *      直接 `node tools/build-bookmarklet.mjs` 时 PATH 上没有它，所以必须显式找。
+ *   3. `PATH` 上任意一个 esbuild（`brew install esbuild` / `npm i -g esbuild`）。
+ *   4. 万一本目录被放进某个 phase.rs 克隆里，用它 `client/` 下已装好的那份。
+ *      pnpm 把平台包放在
  *      `.pnpm/@esbuild+<platform>@<version>/node_modules/@esbuild/<platform>/bin/esbuild`，
- *      而 `.bin/` 里的垫片在本机实测是坏的（会被当成 JS 解析），所以直接按包目录找
- *      原生可执行文件。
+ *      而那个 `.bin/` 垫片在 macOS + pnpm 下实测是坏的（会被当成 JS 解析），
+ *      所以直接按包目录找原生可执行文件。
  *
  * 找不到就明确失败——产物已提交在 dist/，日常并不需要重新生成。
  */
@@ -67,6 +71,9 @@ function findEsbuild() {
     }
     return override;
   }
+
+  const local = join(ROOT, "node_modules", ".bin", "esbuild");
+  if (existsSync(local)) return local;
 
   for (const directory of (process.env.PATH ?? "").split(delimiter)) {
     if (!directory) continue;
