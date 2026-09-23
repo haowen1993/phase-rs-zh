@@ -1,7 +1,7 @@
 # phase-rs-zh
 
 一个**书签小工具**：把 [phase.rs](https://phase-rs.dev) 网页版的卡图改走
-[大学院废墟](https://sbwsz.com)（sbwsz.com）的图床——该印刷有简体中文图就用中文图，
+[大学院废墟](https://mtgch.com)（mtgch.com）的图床——该印刷有简体中文图就用中文图，
 没有就用大学院废墟自己的英文图。
 
 不装扩展、不装脚本管理器、不请求任何 API、不写任何持久化状态。整个工具是一个书签，
@@ -244,7 +244,7 @@ sudo chown -R $(id -u):$(id -g) ~/.npm # 或者根治那个缓存目录的属主
 
 ## 归属与许可
 
-- 卡图来自**大学院废墟**（[sbwsz.com](https://sbwsz.com)，图床 `images.mtgch.com`）。
+- 卡图来自**大学院废墟**（[mtgch.com](https://mtgch.com)，图床 `images.mtgch.com`）。
   其中既包含官方简体中文印刷图，也包含社区制作的中文图；大学院废墟在 `zhs_image`
   字段里标注了每张图的来源（如 `官方`、`衍生物`、`TrentTouch`、`万智烽火`、`新版风云集`）。
 - 本脚本**不复制、不缓存、不再分发**任何卡图，只在显示时把浏览器指向大学院废墟的图床。

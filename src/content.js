@@ -1,7 +1,7 @@
 /**
  * Phase 中文卡图 — content script（MAIN world，document_start）。
  *
- * 作用：把 phase.rs 网页版渲染的卡图，全部改走大学院废墟（sbwsz.com）的图床：
+ * 作用：把 phase.rs 网页版渲染的卡图，全部改走大学院废墟（mtgch.com）的图床：
  * 该印刷有简体中文图就用中文图，没有就用大学院废墟自己的英文图。开启插件即生效；
  * 关闭插件后本脚本不被注入，页面自然回到 Scryfall 英文图。
  *

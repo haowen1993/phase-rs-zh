@@ -122,7 +122,7 @@ function installPage(bookmarkletUrl, codeHash, codeBytes) {
 </head>
 <body>
 <h1>安装 phase-rs-zh</h1>
-<p>把 <a href="https://phase-rs.dev">phase.rs</a> 网页版的卡图换成大学院废墟（sbwsz.com）的简体中文图。
+<p>把 <a href="https://phase-rs.dev">phase.rs</a> 网页版的卡图换成<a href="https://mtgch.com">大学院废墟</a>（mtgch.com）的简体中文图。
    不用装扩展，不用装脚本管理器。</p>
 
 <p>把下面这个按钮 <strong>拖到书签栏</strong>（在多数浏览器里 <code>⌥⌘B</code> 或
